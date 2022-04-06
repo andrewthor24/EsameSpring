@@ -9,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Date;
+
 @Configuration
 public class InserimentoPrimoElemento {
 
@@ -17,7 +19,7 @@ public class InserimentoPrimoElemento {
     @Bean
     CommandLineRunner initDatabase(ProdottoRepository repository) {
         return args -> {
-            logger.info("Preloading " + repository.save(new Prodotto("computer",799.99f)));
+            logger.info("Preloading " + repository.save(new Prodotto("computer",799.99f,new Date())));
         };
     }
 }
