@@ -3,9 +3,18 @@ package it.devlecc.esamespring.controller;
 import it.devlecc.esamespring.avviso.ProdottoNonTrovato;
 import it.devlecc.esamespring.model.Prodotto;
 import it.devlecc.esamespring.persistenza.ProdottoRepository;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Date;
 import java.util.List;
 
@@ -67,5 +76,28 @@ public class ProdottoRestController {
         return repository.findByPrezzoLessThan(max);
     }
 
+    @PostMapping("/caricafile")
+    public ResponseEntity<String> caricaFile(@RequestParam(name = "file") MultipartFile file){
+
+        Logger logger = LoggerFactory.getLogger(ProdottoRestController.class);
+
+        Reader in = null;
+        try {
+            in = new InputStreamReader(file.getInputStream());
+            // Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(in);
+            Iterable<CSVRecord> records = CSVFormat.DEFAULT.builder().build().parse(in);
+            for (CSVRecord record : records) {
+                String autore = record.get(0);
+                logger.info("Autore: " + autore);
+                String titolo = record.get(1);
+                logger.warn("Titolo: " + titolo);
+            }
+        } catch (IOException e) {
+            logger.error("Si è verificato un errore", e);
+        }
+        return ResponseEntity.ok("CSV");
+    }
+
 
 }
+
