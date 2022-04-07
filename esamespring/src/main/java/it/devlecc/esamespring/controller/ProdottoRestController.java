@@ -84,13 +84,14 @@ public class ProdottoRestController {
         Reader in = null;
         try {
             in = new InputStreamReader(file.getInputStream());
-            // Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(in);
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.builder().build().parse(in);
             for (CSVRecord record : records) {
-                String autore = record.get(0);
-                logger.info("Autore: " + autore);
-                String titolo = record.get(1);
-                logger.warn("Titolo: " + titolo);
+                String nome = record.get(0);
+                logger.info("Nome: " + nome);
+                String prezzo = record.get(1);
+                logger.warn("Prezzo: " + prezzo);
+                String data = record.get(2);
+                logger.warn("Data: " + data);
             }
         } catch (IOException e) {
             logger.error("Si è verificato un errore", e);
